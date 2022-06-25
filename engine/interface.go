@@ -6,26 +6,36 @@ import (
 )
 
 type Command interface {
-	Execute(h Hadler)
+	Execute(h Handler)
 }
 
 type Handler interface {
 	Post(cmd Command) error
 }
 
-type PrintCommand string
+type ErrorMessage struct {
+	message string
+}
+
+func (e *ErrorMessage) Execute(loop Handler) {
+	fmt.Printf("SYNTAX ERROR: %s\n", e.message)
+}
+
+type PrintCommand struct {
+	arg string
+}
 
 func (p *PrintCommand) Execute(loop Handler) {
 	fmt.Println(p.arg)
 }
 
 type AddCommand struct {
-	a, b int
+	arg1, arg2 int
 }
 
-func (add AddCommand) Execute(h Handler) {
-	res := add.a + add.b
-	h.Post(PrintCommand(strconv.Itoa(res)))
+func (a *AddCommand) Execute(h Handler) {
+	res := a.arg1 + a.arg2
+	h.Post(&PrintCommand{arg: strconv.Itoa(res)})
 }
 
 type StopCommand struct{}

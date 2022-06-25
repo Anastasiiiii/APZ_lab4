@@ -6,29 +6,41 @@ import (
 )
 
 func Parse(commandLine string) Command {
-	parts := strings.Fields(commandLine)
+	cmdFields := strings.Fields(commandLine)
+	availableCommands := "Available commands: print (1 argument), add (2 arguments)."
 
-	if len(parts) < 2 {
-		return PrintCommand("SYNTAX ERROR: Not enough arguments")
+	if len(cmdFields) < 2 {
+		return &ErrorMessage{message: "Incorrect number of args or no command. " + availableCommands}
 	}
 
-	switch parts[0] {
+	command := cmdFields[0]
+
+	switch command {
 	case "print":
-		return PrintCommand(parts[1])
+		if (len(cmdFields)) != 2 {
+			return &ErrorMessage{message: "`print` command can accept only one argument"}
+		}
+
+		return &PrintCommand{arg: cmdFields[1]}
+
 	case "add":
-		if len(parts) < 3 {
-			return PrintCommand("SYNTAX ERROR: Not enough arguments for add command")
+		if len(cmdFields) != 3 {
+			return &ErrorMessage{message: "`add` command requires exactly 2 arguments"}
 		}
-		arg1, err := strconv.Atoi(parts[1])
+
+		arg1, err := strconv.Atoi(cmdFields[1])
 		if err != nil {
-			return PrintCommand("SYNTAX ERROR: " + err.Error())
+			return &ErrorMessage{message: err.Error()}
 		}
-		arg2, err := strconv.Atoi(parts[2])
+
+		arg2, err := strconv.Atoi(cmdFields[2])
 		if err != nil {
-			return PrintCommand("SYNTAX ERROR: " + err.Error())
+			return &ErrorMessage{message: err.Error()}
 		}
-		return AddCommand{a: arg1, b: arg2}
+
+		return &AddCommand{arg1: arg1, arg2: arg2}
+
 	default:
-		return NewPrintCommand("SYNTAX ERROR: Unknown instruction")
+		return &ErrorMessage{message: "Unknown instruction. " + availableCommands}
 	}
 }
