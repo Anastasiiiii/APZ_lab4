@@ -9,10 +9,6 @@ type Command interface {
 	Execute(h Handler)
 }
 
-type Handler interface {
-	Post(cmd Command) error
-}
-
 type ErrorMessage struct {
 	message string
 }
@@ -41,5 +37,5 @@ func (a *AddCommand) Execute(h Handler) {
 type StopCommand struct{}
 
 func (sc StopCommand) Execute(h Handler) {
-	h.(*EventLoop).stop = true
+	h.(*EventLoop).stopped = true
 }
