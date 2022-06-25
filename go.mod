@@ -1,4 +1,4 @@
-module github.com/Anastasiiiii/APZ_Lab4
+module github.com/Anastasiiiii/APZ_lab4
 
 go 1.17
 
