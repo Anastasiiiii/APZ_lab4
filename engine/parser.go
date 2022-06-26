@@ -7,10 +7,10 @@ import (
 
 func Parse(commandLine string) Command {
 	cmdFields := strings.Fields(commandLine)
-	availableCommands := "Available commands: print (1 argument), add (2 arguments)."
+	//availableCommands := "Available commands: print (1 argument), add (2 arguments)."
 
 	if len(cmdFields) < 2 {
-		return &ErrorMessage{message: "Incorrect number of args or no command. " + availableCommands}
+		return &ErrorMessage{message: "Incorrect number of args or no command. "}
 	}
 
 	command := cmdFields[0]
@@ -41,6 +41,6 @@ func Parse(commandLine string) Command {
 		return &AddCommand{arg1: arg1, arg2: arg2}
 
 	default:
-		return &ErrorMessage{message: "Unknown instruction. " + availableCommands}
+		return &ErrorMessage{message: "Unknown instruction"}
 	}
 }
